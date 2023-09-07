@@ -25,7 +25,10 @@ public partial class Insert : ContentPage
         try
         {
             _repo.InsertProduct(productInsert);
+            //MEMORY BOG -> Thousands of pages
             await Navigation.PushAsync(new MainPage());//PASS THE REPO BUT PROPER MVVM -> BACK BTN
+            //await Navigation.PopAsync();
+            //POP AND REFRESH OF MY FIRST MAIN PAGE.
         }
         catch (Exception ex)
         {

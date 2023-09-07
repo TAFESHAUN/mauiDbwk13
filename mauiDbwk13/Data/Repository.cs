@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 
 namespace mauiDbwk13.Data
 {
@@ -7,15 +6,16 @@ namespace mauiDbwk13.Data
     {
         #region Connection String
 
-
+        //HARD CODE BAD
+        //CONFIG MANAGER
+        //ConfigurationManager cFig { get; set; }
         private string _connectionString;
         public Repository()
         {
             //AZURE
             //_connectionString = "Data Source=mysqlserver1092837465.database.windows.net;Initial Catalog=StoreDb;User ID=azureuser;Password=MyAzure_92;Connect Timeout=60;Encrypt=True;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
-           
-            //SSMS
-            _connectionString = @"Data Source=DESKTOP-TBL2MHJ;Initial Catalog=StoreDB;Integrated Security=True;Trust Server Certificate=True";
+            //cFig.GetType().GetProperty(myDbConnect); //Property Type, XML
+            _connectionString = @"Data Source=DESKTOP-TBL2MHJ;Initial Catalog=StoreDB;Integrated Security=True";// Trust Server Certificate=True";
         } 
         #endregion
 
@@ -23,27 +23,33 @@ namespace mauiDbwk13.Data
         public IEnumerable<Products> GetProduct()
         {
             var productList = new List<Products>();
+            //var connection = new SqlConnection(_connectionString)
+            //connection.Open();
+            //////CRASHED
+            //connection.Close();
             using (var connection = new SqlConnection(_connectionString))
-            using (var command = new SqlCommand("SELECT * FROM Products", connection))
             {
-                connection.Open();
-                var reader = command.ExecuteReader();
-                if (reader.HasRows)
+                using (var command = new SqlCommand("SELECT * FROM Products", connection))
                 {
-                    while (reader.Read())
+                    connection.Open();
+                    var reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        var aProduct = new Products
+                        while (reader.Read())
                         {
-                            Id = reader.GetInt32(0),
-                            Product = reader.GetString(1),
-                            Price = Convert.ToDouble(reader.GetDecimal(2)),
-                            Code = reader.GetString(3).ToUpper()
-                        };
-                        productList.Add(aProduct);
+                            var aProduct = new Products
+                            {
+                                Id = reader.GetInt32(0),
+                                Product = reader.GetString(1),
+                                Price = Convert.ToDouble(reader.GetDecimal(2)),
+                                Code = reader.GetString(3).ToUpper()
+                            };
+                            productList.Add(aProduct);
 
+                        }
                     }
                 }
-            }
+            }//connection.Close();
             return productList;
         }
         #endregion
@@ -53,18 +59,18 @@ namespace mauiDbwk13.Data
         {
             int result = 0;
             using (var connection = new SqlConnection(_connectionString))
-            using (var command = new SqlCommand())
-            {
-                command.CommandText = "UPDATE Products SET Product=@Product,Price=@Price,Code=@Code WHERE Id = @id";
-                command.Parameters.AddWithValue("@id", p.Id);
-                command.Parameters.AddWithValue("@Product", p.Product);
-                command.Parameters.AddWithValue("@Price", p.Price);
-                command.Parameters.AddWithValue("@Code", p.Code);
+                using (var command = new SqlCommand())
+                {
+                    command.CommandText = "UPDATE Products SET Product=@Product,Price=@Price,Code=@Code WHERE Id = @id";
+                    command.Parameters.AddWithValue("@id", p.Id);
+                    command.Parameters.AddWithValue("@Product", p.Product);
+                    command.Parameters.AddWithValue("@Price", p.Price);
+                    command.Parameters.AddWithValue("@Code", p.Code);
 
-                command.Connection = connection;
-                connection.Open();
-                result = command.ExecuteNonQuery();
-            }
+                    command.Connection = connection;
+                    connection.Open();
+                    result = command.ExecuteNonQuery();
+                }
             return result;
         }
         #endregion
@@ -77,7 +83,7 @@ namespace mauiDbwk13.Data
             using (var command = new SqlCommand())
             {
                 command.CommandText = "INSERT INTO Products VALUES (@Product,@Price,@Code)";
-                //command.Parameters.AddWithValue("@id", p.Id);
+                //command.Parameters.AddWithValue("@id", p.Id); -> THIS IS UNIQUE/AS IDENTITY
                 command.Parameters.AddWithValue("@Product", p.Product);
                 command.Parameters.AddWithValue("@Price", p.Price);
                 command.Parameters.AddWithValue("@Code", p.Code);

@@ -48,7 +48,7 @@ public partial class Details : ContentPage
             try
             {
                 _repo.DeleteProduct(_productDetails);
-                await Navigation.PushAsync(new MainPage());
+                await Navigation.PushAsync(new MainPage());//POP -> Refreash ALL DATA on mainpage.
             }
             catch (Exception ex)
             {
@@ -59,6 +59,7 @@ public partial class Details : ContentPage
         {
             await DisplayAlert("Resolved", "You did not delete", "Ok");
             //await Navigation.PushAsync(new MainPage());
+            //await Navigation.PopAsync();
         }
     }
 }
