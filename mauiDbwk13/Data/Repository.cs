@@ -12,8 +12,6 @@ namespace mauiDbwk13.Data
         private string _connectionString;
         public Repository()
         {
-            //AZURE
-            //_connectionString = "Data Source=mysqlserver1092837465.database.windows.net;Initial Catalog=StoreDb;User ID=azureuser;Password=MyAzure_92;Connect Timeout=60;Encrypt=True;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
             //cFig.GetType().GetProperty(myDbConnect); //Property Type, XML
             _connectionString = @"Data Source=DESKTOP-TBL2MHJ;Initial Catalog=StoreDB;Integrated Security=True;Encrypt=False";// Trust Server Certificate=True";
         } 
