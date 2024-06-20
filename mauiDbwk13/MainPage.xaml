@@ -4,7 +4,9 @@
              x:Class="mauiDbwk13.MainPage"
              >
 
-    <ScrollView>
+    <Grid>
+        <!--HEADER BAR SHOULD GO -->
+        <ScrollView>
         <StackLayout>
             <Button Text="ADD NEW PRODUCT" Clicked="Button_Clicked"></Button>
             <ListView x:Name="ProductView"
@@ -31,5 +33,7 @@
             </ListView>
         </StackLayout>
     </ScrollView>
+    <!--FOOTER BAR SHOULD GO -->
+    </Grid>
 
 </ContentPage>
